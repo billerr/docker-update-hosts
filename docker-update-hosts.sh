@@ -1,4 +1,4 @@
-#!/opt/homebrew/bin/bash
+#!/bin/bash
 
 #============================================================================================
 #   FILE:           docker-update-hosts.sh
@@ -46,14 +46,14 @@ function processEvent() {
     if [ $event_type = "start" ]; then
 
         # inspect the container and extract the service name
-        local service_name=`docker inspect --format '{{ .Name }}' $container_id `
+        local service_name=`docker inspect --format '{{ .Config.Hostname }}' $container_id `
 
         verbose "Service key: $key  Service Name: $service_name"
         
         # check if the service key not exists
         if ! [ ${services["$key"]+_} ]; then
             # adds the service name in the map
-            services+=(["$key"]=${service_name:1} )
+            services+=(["$key"]=${service_name} )
             
             if [ $QUIET = "0" ]; then
 
